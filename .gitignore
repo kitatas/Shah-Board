@@ -58,3 +58,21 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# JetBrains
+.idea
+
+# Assets
+Assets/Doozy
+Assets/Doozy.meta
+Assets/Editor
+Assets/Editor.meta
+Assets/Gizmos
+Assets/Gizmos.meta
+Assets/MPUIKit
+Assets/MPUIKit.meta
+Assets/Photon
+Assets/Photon.meta
+Assets/Plugins
+Assets/Plugins.meta
+Assets/VContainer
+Assets/VContainer.meta
