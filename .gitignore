@@ -62,6 +62,8 @@ crashlytics-build.properties
 .idea
 
 # Assets
+Assets/ConsolePro
+Assets/ConsolePro.meta
 Assets/Doozy
 Assets/Doozy.meta
 Assets/Editor
