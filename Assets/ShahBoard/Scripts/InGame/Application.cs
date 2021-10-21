@@ -2,6 +2,11 @@ namespace ShahBoard.InGame
 {
     #region Const
 
+    public sealed class BoardConfig
+    {
+        public const int VERTICAL = 7;
+        public const int HORIZONTAL = 7;
+    }
 
 
     #endregion
@@ -32,9 +37,23 @@ namespace ShahBoard.InGame
 
     public enum PlayerType
     {
+        None = 0,
+        Master = 1,
+        Client = 2,
+    }
+
+    public enum PlacementType
+    {
         None,
-        Master,
-        Client,
+        Valid,
+        Invalid,
+        Input,
+    }
+
+    public enum PieceType
+    {
+        None,
+        King,
     }
 
     #endregion
