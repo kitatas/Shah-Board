@@ -15,10 +15,10 @@ namespace ShahBoard.InGame.Domain.Factory
             _placementContainer = placementContainer;
         }
 
-        public void GeneratePlacementObject(BoardPlacementView placementView, Vector3 generatePosition, PlayerType type)
+        public void GeneratePlacementObject(BoardPlacementView placementView, Vector3 generatePosition, PlayerType type, PieceView pieceView = null)
         {
             var placementObject = Object.Instantiate(placementView);
-            placementObject.Init(_board, generatePosition);
+            placementObject.Init(_board, generatePosition, pieceView);
             _placementContainer.Add(placementObject, type);
         }
     }

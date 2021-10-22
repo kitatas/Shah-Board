@@ -13,11 +13,12 @@ namespace ShahBoard.InGame.Domain.Factory
             _pieceContainer = pieceContainer;
         }
 
-        public void Generate(PieceView pieceView, Vector3 position, PlayerType type)
+        public PieceView Generate(PieceView pieceView, Vector3 position, PlayerType type)
         {
             var pieceObject = Object.Instantiate(pieceView);
             pieceObject.Init(position, type);
             _pieceContainer.Add(type, pieceObject);
+            return pieceObject;
         }
     }
 }

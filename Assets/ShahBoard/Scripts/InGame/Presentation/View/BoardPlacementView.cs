@@ -10,13 +10,12 @@ namespace ShahBoard.InGame.Presentation.View
         private ReactiveProperty<PlacementType> _placementType;
         [SerializeField] private PieceView _placementPiece;
 
-        public void Init(Transform parent, Vector3 position)
+        public void Init(Transform parent, Vector3 position, PieceView pieceView)
         {
             transform.parent = parent;
             transform.position = position;
 
-            // TODO: 皇帝の場合はnullにしない
-            _placementPiece = null;
+            _placementPiece = pieceView;
 
             var meshRenderer = GetComponent<MeshRenderer>();
             _placementType = new ReactiveProperty<PlacementType>(PlacementType.Invalid);

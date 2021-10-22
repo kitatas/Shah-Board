@@ -15,58 +15,57 @@ namespace ShahBoard.InGame.Domain.UseCase
                 {
                     var position = new Vector3(j - 3.0f, 0.0f, i - 3.0f);
 
+                    // 皇帝の配置
+                    if (j == 3)
+                    {
+                        var pieceView = i switch
+                        {
+                            0 => pieceFactory.Generate(pieceRepository.FindPiece(PieceType.Emperor), position, PlayerType.Master),
+                            BoardConfig.VERTICAL - 1 => pieceFactory.Generate(pieceRepository.FindPiece(PieceType.Emperor), position, PlayerType.Client),
+                            _ => null
+                        };
+
+                        boardFactory.GeneratePlacementObject(boardRepository.GetPlacement(), position, PlayerType.None, pieceView);
+                        continue;
+                    }
+
+                    // Masterの初期配置可能マスの設定
                     if (i == 0)
                     {
-                        // 王の配置
-                        if (j == 3)
-                        {
-                            pieceFactory.Generate(pieceRepository.FindPiece(PieceType.Emperor), position, PlayerType.Master);
-                        }
-                        // 配置可能マスに設定
-                        else
-                        {
-                            boardFactory.GeneratePlacementObject(boardRepository.GetPlacement(), position, PlayerType.Master);
-                            continue;
-                        }
+                        boardFactory.GeneratePlacementObject(boardRepository.GetPlacement(), position, PlayerType.Master);
+                        continue;
                     }
-                    else if (i == BoardConfig.VERTICAL - 1)
+
+                    // Clientの初期配置可能マスの設定
+                    if (i == BoardConfig.VERTICAL - 1)
                     {
-                        // 王の配置
-                        if (j == 3)
-                        {
-                            pieceFactory.Generate(pieceRepository.FindPiece(PieceType.Emperor), position, PlayerType.Client);
-                        }
-                        // 配置可能マスに設定
-                        else
-                        {
-                            boardFactory.GeneratePlacementObject(boardRepository.GetPlacement(), position, PlayerType.Client);
-                            continue;
-                        }
+                        boardFactory.GeneratePlacementObject(boardRepository.GetPlacement(), position, PlayerType.Client);
+                        continue;
                     }
 
                     boardFactory.GeneratePlacementObject(boardRepository.GetPlacement(), position, PlayerType.None);
                 }
             }
 
-            // 自分の駒
-            var index = 1;
+            // Masterの駒
+            var index = PieceType.Fool;
             for (int i = 0; i < 2; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
                     var position = new Vector3(j - 2.0f, 0.0f, -(i + 4.5f));
-                    pieceFactory.Generate(pieceRepository.GetPiece(index++), position, PlayerType.Master);
+                    pieceFactory.Generate(pieceRepository.FindPiece(index++), position, PlayerType.Master);
                 }
             }
 
-            // 相手の駒
-            index = 1;
+            // Clientの駒
+            index = PieceType.Fool;
             for (int i = 0; i < 2; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
                     var position = new Vector3(j - 2.0f, 0.0f, i + 4.5f);
-                    pieceFactory.Generate(pieceRepository.GetPiece(index++), position, PlayerType.Client);
+                    pieceFactory.Generate(pieceRepository.FindPiece(index++), position, PlayerType.Client);
                 }
             }
         }
