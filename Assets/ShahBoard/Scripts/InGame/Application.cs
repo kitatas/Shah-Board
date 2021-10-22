@@ -8,7 +8,6 @@ namespace ShahBoard.InGame
         public const int HORIZONTAL = 7;
     }
 
-
     #endregion
 
     #region Enum
@@ -55,6 +54,12 @@ namespace ShahBoard.InGame
         None,
         Emperor,
         Fool,
+    }
+
+    public enum PieceStatus
+    {
+        None,
+        InDeck,
     }
 
     #endregion

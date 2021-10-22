@@ -36,5 +36,26 @@ namespace ShahBoard.InGame.Data.Container
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
+
+        public void UpdateEditPlacement(PlayerType playerType, PlacementType placementType)
+        {
+            foreach (var placementView in _piecePlacementViews[(int)playerType - 1])
+            {
+                placementView.UpdatePlacementType(placementType);
+            }
+        }
+
+        /// <summary>
+        /// pieceViewと同じ位置のマスを取得
+        /// </summary>
+        /// <param name="pieceView"></param>
+        /// <returns></returns>
+        public BoardPlacementView FindPlacement(PieceView pieceView)
+        {
+            return _placementViews
+                .Find(v =>
+                    Mathf.Approximately(v.GetPosition().x, pieceView.GetInDeckPosition().x) &&
+                    Mathf.Approximately(v.GetPosition().z, pieceView.GetInDeckPosition().z));
+        }
     }
 }
