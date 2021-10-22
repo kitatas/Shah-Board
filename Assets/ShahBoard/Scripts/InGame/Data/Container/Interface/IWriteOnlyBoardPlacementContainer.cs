@@ -4,6 +4,6 @@ namespace ShahBoard.InGame.Data.Container
 {
     public interface IWriteOnlyBoardPlacementContainer
     {
-        void Add(BoardPlacementView placementView);
+        void Add(BoardPlacementView placementView, PlayerType type);
     }
 }

@@ -53,7 +53,8 @@ namespace ShahBoard.InGame
     public enum PieceType
     {
         None,
-        King,
+        Emperor,
+        Fool,
     }
 
     #endregion

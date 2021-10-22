@@ -14,20 +14,37 @@ namespace ShahBoard.InGame.Domain.UseCase
                 for (int j = 0; j < BoardConfig.HORIZONTAL; j++)
                 {
                     var position = new Vector3(j - 3.0f, 0.0f, i - 3.0f);
-                    boardFactory.GeneratePlacementObject(boardRepository.GetPlacement(), position);
 
-                    // 王の配置
-                    if (j == 3)
+                    if (i == 0)
                     {
-                        if (i == 0)
+                        // 王の配置
+                        if (j == 3)
                         {
-                            pieceFactory.Generate(pieceRepository.FindPiece(PieceType.King), position, PlayerType.Master);
+                            pieceFactory.Generate(pieceRepository.FindPiece(PieceType.Emperor), position, PlayerType.Master);
                         }
-                        else if (i == BoardConfig.VERTICAL - 1)
+                        // 配置可能マスに設定
+                        else
                         {
-                            pieceFactory.Generate(pieceRepository.FindPiece(PieceType.King), position, PlayerType.Client);
+                            boardFactory.GeneratePlacementObject(boardRepository.GetPlacement(), position, PlayerType.Master);
+                            continue;
                         }
                     }
+                    else if (i == BoardConfig.VERTICAL - 1)
+                    {
+                        // 王の配置
+                        if (j == 3)
+                        {
+                            pieceFactory.Generate(pieceRepository.FindPiece(PieceType.Emperor), position, PlayerType.Client);
+                        }
+                        // 配置可能マスに設定
+                        else
+                        {
+                            boardFactory.GeneratePlacementObject(boardRepository.GetPlacement(), position, PlayerType.Client);
+                            continue;
+                        }
+                    }
+
+                    boardFactory.GeneratePlacementObject(boardRepository.GetPlacement(), position, PlayerType.None);
                 }
             }
 
