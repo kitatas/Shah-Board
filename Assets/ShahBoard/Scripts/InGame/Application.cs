@@ -8,6 +8,11 @@ namespace ShahBoard.InGame
         public const int HORIZONTAL = 7;
     }
 
+    public sealed class UiConfig
+    {
+        public const float TWEEN_TIME = 0.25f;
+    }
+
     #endregion
 
     #region Enum

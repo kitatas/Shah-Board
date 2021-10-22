@@ -1,6 +1,8 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using ShahBoard.InGame.Domain.UseCase;
+using ShahBoard.InGame.Presentation.View;
+using UniRx;
 
 namespace ShahBoard.InGame.Presentation.Controller
 {
@@ -9,29 +11,59 @@ namespace ShahBoard.InGame.Presentation.Controller
         private readonly IBoardPlacementContainerUseCase _placementContainerUseCase;
         private readonly InputUseCase _inputUseCase;
         private readonly PieceEditUseCase _pieceEditUseCase;
+        private readonly PlayerStatusUseCase _statusUseCase;
+        private readonly EditView _editView;
 
         public EditState(IBoardPlacementContainerUseCase placementContainerUseCase, InputUseCase inputUseCase,
-            PieceEditUseCase pieceEditUseCase)
+            PieceEditUseCase pieceEditUseCase, PlayerStatusUseCase statusUseCase, EditView editView)
         {
             _placementContainerUseCase = placementContainerUseCase;
             _inputUseCase = inputUseCase;
             _pieceEditUseCase = pieceEditUseCase;
+            _statusUseCase = statusUseCase;
+            _editView = editView;
         }
 
         public override GameState state => GameState.Edit;
 
         public override async UniTask InitAsync(CancellationToken token)
         {
+            _editView.Init();
 
+            _editView.OnEditAuto()
+                .Subscribe(x =>
+                {
+                    // 
+                    UnityEngine.Debug.Log($"[LOG] push auto: {x}");
+                })
+                .AddTo(_editView);
+
+            _editView.OnEditReset()
+                .Subscribe(x =>
+                {
+                    // 
+                    UnityEngine.Debug.Log($"[LOG] push reset: {x}");
+                })
+                .AddTo(_editView);
+
+            _editView.OnEditComplete()
+                .Subscribe(x =>
+                {
+                    UnityEngine.Debug.Log($"[LOG] push complete: {x}");
+                    _statusUseCase.SetEditComplete(x);
+                })
+                .AddTo(_editView);
         }
 
         public override async UniTask<GameState> TickAsync(CancellationToken token)
         {
-            // TODO: 2プレイヤーの編成完了ボタンが押されるまで
-            while (true)
+            while (_statusUseCase.IsEditing())
             {
                 // 入力待ち
-                await UniTask.WaitUntil(() => _inputUseCase.isTap, cancellationToken: token);
+                await UniTask.WhenAny(
+                    UniTask.WaitUntil(() => _inputUseCase.isTap, cancellationToken: token),
+                    _editView.OnEditComplete().ToUniTask(true, token)
+                );
 
                 var storePiece = _pieceEditUseCase.GetEditPiece(_inputUseCase.tapPosition);
                 if (storePiece != null)
@@ -112,9 +144,6 @@ namespace ShahBoard.InGame.Presentation.Controller
                     }, cancellationToken: token);
 
                     _placementContainerUseCase.UpdateEditPlacement(storePiece.playerType, PlacementType.Invalid);
-
-                    // TODO: あとで消す
-                    break;
                 }
             }
 
