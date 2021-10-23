@@ -15,12 +15,16 @@ namespace ShahBoard.InGame.Domain.UseCase
 
         public void UpdateEditPlacement(PlayerType playerType, PlacementType placementType)
         {
-            _placementContainer.UpdateEditPlacement(playerType, placementType);
+            foreach (var placementView in _placementContainer.GetEditPlacement(playerType))
+            {
+                placementView.UpdatePlacementType(placementType);
+            }
         }
 
         public BoardPlacementView FindPlacement(PieceView pieceView)
         {
-            return _placementContainer.FindPlacement(pieceView);
+            return _placementContainer.GetAllPlacement()
+                .Find(v => v.IsEqualPosition(pieceView.GetInDeckPosition()));
         }
 
         public void UpdateAllPlacementType(PlacementType placementType)
@@ -38,11 +42,13 @@ namespace ShahBoard.InGame.Domain.UseCase
         /// <param name="placementType"></param>
         public void UpdatePlayerPiecePlacement(PlayerType playerType, PlacementType placementType)
         {
-            UpdateAllPlacementType(PlacementType.Invalid);
-
-            foreach (var placementView in _placementContainer.GetPiecePlacementList(playerType))
+            foreach (var placementView in _placementContainer.GetAllPlacement())
             {
-                placementView.UpdatePlacementType(placementType);
+                var piece = placementView.GetPlacementPiece();
+                if (piece != null && piece.playerType == playerType)
+                {
+                    placementView.UpdatePlacementType(placementType);
+                }
             }
         }
 
@@ -53,13 +59,12 @@ namespace ShahBoard.InGame.Domain.UseCase
         /// <param name="positionList"></param>
         public void SetUpMoveRangePlacement(PlayerType playerType, Vector3[] positionList)
         {
-            for (int i = 0; i < positionList.Length; i++)
+            foreach (var position in positionList)
             {
                 foreach (var placementView in _placementContainer.GetAllPlacement())
                 {
                     // 異なる座標
-                    if (Mathf.Approximately(positionList[i].x, placementView.GetPosition().x) == false ||
-                        Mathf.Approximately(positionList[i].z, placementView.GetPosition().z) == false)
+                    if (placementView.IsEqualPosition(position) == false)
                     {
                         continue;
                     }

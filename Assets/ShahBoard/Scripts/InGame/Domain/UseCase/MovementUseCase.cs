@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace ShahBoard.InGame.Domain.UseCase
 {
-    public sealed class PieceMovementUseCase
+    public sealed class MovementUseCase
     {
         private readonly PieceRepository _repository;
 
-        public PieceMovementUseCase(PieceRepository repository)
+        public MovementUseCase(PieceRepository repository)
         {
             _repository = repository;
         }

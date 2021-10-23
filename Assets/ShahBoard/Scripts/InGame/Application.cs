@@ -22,7 +22,7 @@ namespace ShahBoard.InGame
         None,
         Match,
         Edit,
-        Input,
+        Select,
         Move,
         Battle,
         Judge,

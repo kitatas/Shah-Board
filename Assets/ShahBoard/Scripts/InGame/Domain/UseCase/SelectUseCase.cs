@@ -3,31 +3,21 @@ using UnityEngine;
 
 namespace ShahBoard.InGame.Domain.UseCase
 {
-    public sealed class PieceSelectUseCase
+    public sealed class SelectUseCase
     {
         private readonly Camera _camera;
 
-        public PieceSelectUseCase(Camera camera)
+        public SelectUseCase(Camera camera)
         {
             _camera = camera;
         }
 
-        public PieceView GetPiece(Vector3 tapPosition, PlayerType playerType)
-        {
-            var ray = _camera.ScreenPointToRay(tapPosition);
-            if (Physics.Raycast(ray, out var hit))
-            {
-                var piece = hit.collider.gameObject.GetComponent<PieceView>();
-                if (piece != null && piece.playerType == playerType && piece.IsInDeck())
-                {
-                    return piece;
-                }
-            }
-
-            return null;
-        }
-
-        public BoardPlacementView GetNextPlacement(Vector3 tapPosition)
+        /// <summary>
+        /// 有効なマスを取得
+        /// </summary>
+        /// <param name="tapPosition"></param>
+        /// <returns></returns>
+        public BoardPlacementView GetValidPlacement(Vector3 tapPosition)
         {
             var ray = _camera.ScreenPointToRay(tapPosition);
             if (Physics.Raycast(ray, out var hit))
@@ -57,6 +47,23 @@ namespace ShahBoard.InGame.Domain.UseCase
                 {
                     return piece;
                 }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 盤上のPlayerTypeのコマを取得
+        /// </summary>
+        /// <param name="tapPosition"></param>
+        /// <param name="playerType"></param>
+        /// <returns></returns>
+        public PieceView GetPlayerPiece(Vector3 tapPosition, PlayerType playerType)
+        {
+            var piece = GetBoardPiece(tapPosition);
+            if (piece != null && piece.playerType == playerType)
+            {
+                return piece;
             }
 
             return null;

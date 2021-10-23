@@ -3,17 +3,18 @@ using UnityEngine;
 
 namespace ShahBoard.InGame.Domain.UseCase
 {
-    public sealed class PieceEditUseCase
+    public sealed class EditUseCase
     {
         private readonly Camera _camera;
+        private const float EDIT_HEIGHT = 5.0f;
 
-        public PieceEditUseCase(Camera camera)
+        public EditUseCase(Camera camera)
         {
             _camera = camera;
         }
 
         /// <summary>
-        /// 編成可能な駒を取得
+        /// 編成可能なコマを取得
         /// </summary>
         /// <param name="touchPosition"></param>
         /// <returns></returns>
@@ -35,7 +36,7 @@ namespace ShahBoard.InGame.Domain.UseCase
         public Vector3 GetEditPosition(Vector3 touchPosition)
         {
             var position = _camera.ScreenToWorldPoint(touchPosition);
-            position.y = 5.0f;
+            position.y = EDIT_HEIGHT;
             return position;
         }
 
@@ -45,10 +46,10 @@ namespace ShahBoard.InGame.Domain.UseCase
         /// <param name="view"></param>
         /// <param name="tapPosition"></param>
         /// <returns></returns>
-        public BoardPlacementView GetPiecePlacement(PieceView view, Vector3 tapPosition)
+        public BoardPlacementView GetValidPlacement(PieceView view, Vector3 tapPosition)
         {
             var position = _camera.ScreenToWorldPoint(tapPosition);
-            position.y = 5.0f;
+            position.y = EDIT_HEIGHT;
             var ray = new Ray(position, -view.transform.up);
             if (Physics.Raycast(ray, out var hit))
             {
@@ -63,7 +64,7 @@ namespace ShahBoard.InGame.Domain.UseCase
         }
 
         /// <summary>
-        /// 皇帝以外の配置済みの駒を取得
+        /// 皇帝以外の配置済みのコマを取得
         /// </summary>
         /// <param name="view"></param>
         /// <param name="tapPosition"></param>
@@ -71,7 +72,7 @@ namespace ShahBoard.InGame.Domain.UseCase
         public PieceView GetPlacementPiece(PieceView view, Vector3 tapPosition)
         {
             var position = _camera.ScreenToWorldPoint(tapPosition);
-            position.y = 5.0f;
+            position.y = EDIT_HEIGHT;
             var ray = new Ray(position, -view.transform.up);
             if (Physics.Raycast(ray, out var hit))
             {

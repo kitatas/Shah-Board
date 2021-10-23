@@ -5,25 +5,25 @@ using ShahBoard.InGame.Presentation.View;
 
 namespace ShahBoard.InGame.Presentation.Controller
 {
-    public sealed class InputState : BaseGameState
+    public sealed class SelectState : BaseGameState
     {
+        private readonly IBoardPlacementContainerUseCase _containerUseCase;
         private readonly InputUseCase _inputUseCase;
+        private readonly MovementUseCase _movementUseCase;
+        private readonly SelectUseCase _selectUseCase;
         private readonly TurnUseCase _turnUseCase;
-        private readonly PieceSelectUseCase _selectUseCase;
-        private readonly PieceMovementUseCase _movementUseCase;
-        private readonly IBoardPlacementContainerUseCase _placementContainerUseCase;
 
-        public InputState(InputUseCase inputUseCase, TurnUseCase turnUseCase, PieceSelectUseCase selectUseCase,
-            PieceMovementUseCase movementUseCase, IBoardPlacementContainerUseCase placementContainerUseCase)
+        public SelectState(IBoardPlacementContainerUseCase containerUseCase, InputUseCase inputUseCase,
+            MovementUseCase movementUseCase, SelectUseCase selectUseCase, TurnUseCase turnUseCase)
         {
+            _containerUseCase = containerUseCase;
             _inputUseCase = inputUseCase;
-            _turnUseCase = turnUseCase;
-            _selectUseCase = selectUseCase;
             _movementUseCase = movementUseCase;
-            _placementContainerUseCase = placementContainerUseCase;
+            _selectUseCase = selectUseCase;
+            _turnUseCase = turnUseCase;
         }
 
-        public override GameState state => GameState.Input;
+        public override GameState state => GameState.Select;
 
         public override async UniTask InitAsync(CancellationToken token)
         {
@@ -45,10 +45,11 @@ namespace ShahBoard.InGame.Presentation.Controller
                 if (selectPiece == null)
                 {
                     // 自分の駒のあるマスの色を更新
-                    _placementContainerUseCase.UpdatePlayerPiecePlacement(currentTurn, PlacementType.Input);
+                    _containerUseCase.UpdateAllPlacementType(PlacementType.Invalid);
+                    _containerUseCase.UpdatePlayerPiecePlacement(currentTurn, PlacementType.Input);
 
                     await UniTask.WaitUntil(() => _inputUseCase.isTap, cancellationToken: token);
-                    selectPiece = _selectUseCase.GetPiece(_inputUseCase.tapPosition, currentTurn);
+                    selectPiece = _selectUseCase.GetPlayerPiece(_inputUseCase.tapPosition, currentTurn);
                     if (selectPiece == null)
                     {
                         continue;
@@ -56,9 +57,9 @@ namespace ShahBoard.InGame.Presentation.Controller
                 }
 
                 // 移動範囲のマスを更新
-                _placementContainerUseCase.UpdateAllPlacementType(PlacementType.Invalid);
+                _containerUseCase.UpdateAllPlacementType(PlacementType.Invalid);
                 var moveRange = _movementUseCase.GetMoveRangeList(selectPiece);
-                _placementContainerUseCase.SetUpMoveRangePlacement(currentTurn, moveRange);
+                _containerUseCase.SetUpMoveRangePlacement(currentTurn, moveRange);
 
                 await UniTask.WaitUntil(() => _inputUseCase.isTap, cancellationToken: token);
 
@@ -75,7 +76,7 @@ namespace ShahBoard.InGame.Presentation.Controller
                     else
                     {
                         // 相手のコマを取れる場合
-                        var placement = _placementContainerUseCase.FindPlacement(boardPiece);
+                        var placement = _containerUseCase.FindPlacement(boardPiece);
                         if (placement.IsEqualPlacementType(PlacementType.Valid))
                         {
                             // 相手のコマを削除
@@ -83,7 +84,7 @@ namespace ShahBoard.InGame.Presentation.Controller
                             boardPiece.gameObject.SetActive(false);
 
                             // コマの移動
-                            _placementContainerUseCase.FindPlacement(selectPiece).SetPlacementPiece(null);
+                            _containerUseCase.FindPlacement(selectPiece).SetPlacementPiece(null);
                             selectPiece.UpdateCurrentPlacement(placement.GetPosition());
                             placement.SetPlacementPiece(selectPiece);
 
@@ -94,7 +95,7 @@ namespace ShahBoard.InGame.Presentation.Controller
                     continue;
                 }
 
-                var nextPlacement = _selectUseCase.GetNextPlacement(_inputUseCase.tapPosition);
+                var nextPlacement = _selectUseCase.GetValidPlacement(_inputUseCase.tapPosition);
                 if (nextPlacement != null && nextPlacement.IsEqualPlacementType(PlacementType.Valid))
                 {
                     // コマがない場合
@@ -102,7 +103,7 @@ namespace ShahBoard.InGame.Presentation.Controller
                     if (nextPlacementPiece == null)
                     {
                         // コマの移動
-                        _placementContainerUseCase.FindPlacement(selectPiece).SetPlacementPiece(null);
+                        _containerUseCase.FindPlacement(selectPiece).SetPlacementPiece(null);
                         selectPiece.UpdateCurrentPlacement(nextPlacement.GetPosition());
                         nextPlacement.SetPlacementPiece(selectPiece);
 
@@ -117,7 +118,7 @@ namespace ShahBoard.InGame.Presentation.Controller
                         nextPlacementPiece.gameObject.SetActive(false);
 
                         // コマの移動
-                        _placementContainerUseCase.FindPlacement(selectPiece).SetPlacementPiece(null);
+                        _containerUseCase.FindPlacement(selectPiece).SetPlacementPiece(null);
                         selectPiece.UpdateCurrentPlacement(nextPlacement.GetPosition());
                         nextPlacement.SetPlacementPiece(selectPiece);
 
@@ -132,7 +133,7 @@ namespace ShahBoard.InGame.Presentation.Controller
                 }
             }
 
-            _placementContainerUseCase.UpdateAllPlacementType(PlacementType.Invalid);
+            _containerUseCase.UpdateAllPlacementType(PlacementType.Invalid);
 
             return GameState.Move;
         }

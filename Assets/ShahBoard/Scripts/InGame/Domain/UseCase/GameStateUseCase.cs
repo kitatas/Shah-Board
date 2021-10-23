@@ -32,7 +32,7 @@ namespace ShahBoard.InGame.Domain.UseCase
             return
                 IsEqual(GameState.Match) ||
                 IsEqual(GameState.Edit) ||
-                IsEqual(GameState.Input) ||
+                IsEqual(GameState.Select) ||
                 IsEqual(GameState.Move) ||
                 IsEqual(GameState.Battle) ||
                 IsEqual(GameState.Judge);

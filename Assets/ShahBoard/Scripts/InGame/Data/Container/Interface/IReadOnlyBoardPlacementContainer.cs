@@ -5,9 +5,7 @@ namespace ShahBoard.InGame.Data.Container
 {
     public interface IReadOnlyBoardPlacementContainer
     {
-        void UpdateEditPlacement(PlayerType playerType, PlacementType placementType);
         List<BoardPlacementView> GetAllPlacement();
-        BoardPlacementView FindPlacement(PieceView pieceView);
-        List<BoardPlacementView> GetPiecePlacementList(PlayerType playerType);
+        List<BoardPlacementView> GetEditPlacement(PlayerType playerType);
     }
 }

@@ -9,14 +9,14 @@ namespace ShahBoard.InGame.Presentation.Controller
     {
         private readonly List<BaseGameState> _states;
 
-        public StateController(MatchState matchState, EditState editState, InputState inputState,
+        public StateController(MatchState matchState, EditState editState, SelectState selectState,
             MoveState moveState, BattleState battleState, JudgeState judgeState, ResultState resultState)
         {
             _states = new List<BaseGameState>
             {
                 matchState,
                 editState,
-                inputState,
+                selectState,
                 moveState,
                 battleState,
                 judgeState,

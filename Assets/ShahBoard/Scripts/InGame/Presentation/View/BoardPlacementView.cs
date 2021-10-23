@@ -64,5 +64,12 @@ namespace ShahBoard.InGame.Presentation.View
         {
             _placementPiece = pieceView;
         }
+
+        public bool IsEqualPosition(Vector3 position)
+        {
+            return
+                Mathf.Approximately(GetPosition().x, position.x) &&
+                Mathf.Approximately(GetPosition().z, position.z);
+        }
     }
 }
