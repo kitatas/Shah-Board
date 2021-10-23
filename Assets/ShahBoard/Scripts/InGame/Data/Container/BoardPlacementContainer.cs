@@ -45,6 +45,11 @@ namespace ShahBoard.InGame.Data.Container
             }
         }
 
+        public List<BoardPlacementView> GetAllPlacement()
+        {
+            return _placementViews;
+        }
+
         /// <summary>
         /// pieceViewと同じ位置のマスを取得
         /// </summary>
@@ -56,6 +61,16 @@ namespace ShahBoard.InGame.Data.Container
                 .Find(v =>
                     Mathf.Approximately(v.GetPosition().x, pieceView.GetInDeckPosition().x) &&
                     Mathf.Approximately(v.GetPosition().z, pieceView.GetInDeckPosition().z));
+        }
+
+        /// <summary>
+        /// PlayerTypeの駒がある全てのBoardPlacementViewを取得
+        /// </summary>
+        /// <param name="playerType"></param>
+        public List<BoardPlacementView> GetPiecePlacementList(PlayerType playerType)
+        {
+            return _placementViews
+                .FindAll(x => x.GetPlacementPiece() != null && x.GetPlacementPiece().playerType == playerType);
         }
     }
 }

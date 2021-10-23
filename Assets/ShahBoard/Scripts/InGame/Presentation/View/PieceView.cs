@@ -18,7 +18,15 @@ namespace ShahBoard.InGame.Presentation.View
             SetInitPosition();
             playerType = type;
 
-            _status = pieceType == PieceType.Emperor ? PieceStatus.InDeck : PieceStatus.None;
+            if (pieceType == PieceType.Emperor)
+            {
+                _status = PieceStatus.InDeck;
+                _inDeckPosition = position;
+            }
+            else
+            {
+                _status = PieceStatus.None;
+            }
         }
 
         public void SetInitPosition()
