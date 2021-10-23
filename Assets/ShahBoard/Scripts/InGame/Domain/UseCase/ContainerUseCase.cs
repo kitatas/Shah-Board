@@ -1,16 +1,20 @@
+using System.Linq;
 using ShahBoard.InGame.Data.Container;
 using ShahBoard.InGame.Presentation.View;
 using UnityEngine;
 
 namespace ShahBoard.InGame.Domain.UseCase
 {
-    public sealed class ContainerUseCase : IBoardPlacementContainerUseCase
+    public sealed class ContainerUseCase : IBoardPlacementContainerUseCase, IPieceContainerUseCase
     {
         private readonly IReadOnlyBoardPlacementContainer _placementContainer;
+        private readonly IReadOnlyPieceContainer _pieceContainer;
 
-        public ContainerUseCase(IReadOnlyBoardPlacementContainer placementContainer)
+        public ContainerUseCase(IReadOnlyBoardPlacementContainer placementContainer,
+            IReadOnlyPieceContainer pieceContainer)
         {
             _placementContainer = placementContainer;
+            _pieceContainer = pieceContainer;
         }
 
         public void UpdateEditPlacement(PlayerType playerType, PlacementType placementType)
@@ -79,6 +83,12 @@ namespace ShahBoard.InGame.Domain.UseCase
                     break;
                 }
             }
+        }
+
+        public bool IsNonePiece(PlayerType playerType)
+        {
+            var pieces = _pieceContainer.GetPlayerPiece(playerType).FindAll(x => x.IsInDeck());
+            return pieces.Count == 1 || pieces.Count(x => x.pieceType == PieceType.Emperor) == 0;
         }
     }
 }

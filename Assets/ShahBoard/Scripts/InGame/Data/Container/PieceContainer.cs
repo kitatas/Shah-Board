@@ -3,7 +3,7 @@ using ShahBoard.InGame.Presentation.View;
 
 namespace ShahBoard.InGame.Data.Container
 {
-    public sealed class PieceContainer : IWriteOnlyPieceContainer
+    public sealed class PieceContainer : IWriteOnlyPieceContainer, IReadOnlyPieceContainer
     {
         private readonly List<PieceView>[] _pieceViews;
 
@@ -19,6 +19,11 @@ namespace ShahBoard.InGame.Data.Container
         public void Add(PlayerType type, PieceView view)
         {
             _pieceViews[(int)type - 1].Add(view);
+        }
+
+        public List<PieceView> GetPlayerPiece(PlayerType type)
+        {
+            return _pieceViews[(int)type - 1];
         }
     }
 }
