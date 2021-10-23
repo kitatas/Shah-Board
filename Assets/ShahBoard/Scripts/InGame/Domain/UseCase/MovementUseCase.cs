@@ -1,24 +1,41 @@
-using System.Linq;
-using ShahBoard.InGame.Domain.Repository;
 using ShahBoard.InGame.Presentation.View;
-using UnityEngine;
 
 namespace ShahBoard.InGame.Domain.UseCase
 {
     public sealed class MovementUseCase
     {
-        private readonly PieceRepository _repository;
+        private PieceView _selectPiece;
+        private PieceView _removePiece;
+        private BoardPlacementView _selectPlacement;
 
-        public MovementUseCase(PieceRepository repository)
+        public void Set(PieceView selectPiece, PieceView removePiece, BoardPlacementView selectPlacement)
         {
-            _repository = repository;
+            _selectPiece = selectPiece;
+            _removePiece = removePiece;
+            _selectPlacement = selectPlacement;
         }
 
-        public Vector3[] GetMoveRangeList(PieceView pieceView)
+        public void Move()
         {
-            return _repository.FindData(pieceView.pieceType).GetMoveRange()
-                .Select(v => v + pieceView.GetInDeckPosition())
-                .ToArray();
+            // 削除するコマがある場合
+            if (_removePiece != null)
+            {
+                _removePiece.RemoveDeck();
+                _removePiece.gameObject.SetActive(false);
+            }
+
+            // コマの移動
+            _selectPiece.UpdateCurrentPlacement(_selectPlacement.GetPosition());
+            _selectPlacement.SetPlacementPiece(_selectPiece);
+
+            Reset();
+        }
+
+        private void Reset()
+        {
+            _selectPiece = null;
+            _removePiece = null;
+            _selectPlacement = null;
         }
     }
 }

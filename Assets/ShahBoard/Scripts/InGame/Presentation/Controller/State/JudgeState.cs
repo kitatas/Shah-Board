@@ -21,7 +21,7 @@ namespace ShahBoard.InGame.Presentation.Controller
             }
             else
             {
-                return GameState.Input;
+                return GameState.Select;
             }
         }
     }

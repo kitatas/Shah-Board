@@ -10,15 +10,18 @@ namespace ShahBoard.InGame.Presentation.Controller
         private readonly IBoardPlacementContainerUseCase _containerUseCase;
         private readonly InputUseCase _inputUseCase;
         private readonly MovementUseCase _movementUseCase;
+        private readonly PieceDataUseCase _pieceDataUseCase;
         private readonly SelectUseCase _selectUseCase;
         private readonly TurnUseCase _turnUseCase;
 
         public SelectState(IBoardPlacementContainerUseCase containerUseCase, InputUseCase inputUseCase,
-            MovementUseCase movementUseCase, SelectUseCase selectUseCase, TurnUseCase turnUseCase)
+            MovementUseCase movementUseCase, PieceDataUseCase pieceDataUseCase, SelectUseCase selectUseCase,
+            TurnUseCase turnUseCase)
         {
             _containerUseCase = containerUseCase;
             _inputUseCase = inputUseCase;
             _movementUseCase = movementUseCase;
+            _pieceDataUseCase = pieceDataUseCase;
             _selectUseCase = selectUseCase;
             _turnUseCase = turnUseCase;
         }
@@ -58,7 +61,7 @@ namespace ShahBoard.InGame.Presentation.Controller
 
                 // 移動範囲のマスを更新
                 _containerUseCase.UpdateAllPlacementType(PlacementType.Invalid);
-                var moveRange = _movementUseCase.GetMoveRangeList(selectPiece);
+                var moveRange = _pieceDataUseCase.GetMoveRangeList(selectPiece);
                 _containerUseCase.SetUpMoveRangePlacement(currentTurn, moveRange);
 
                 await UniTask.WaitUntil(() => _inputUseCase.isTap, cancellationToken: token);
@@ -79,15 +82,8 @@ namespace ShahBoard.InGame.Presentation.Controller
                         var placement = _containerUseCase.FindPlacement(boardPiece);
                         if (placement.IsEqualPlacementType(PlacementType.Valid))
                         {
-                            // 相手のコマを削除
-                            boardPiece.RemoveDeck();
-                            boardPiece.gameObject.SetActive(false);
-
-                            // コマの移動
                             _containerUseCase.FindPlacement(selectPiece).SetPlacementPiece(null);
-                            selectPiece.UpdateCurrentPlacement(placement.GetPosition());
-                            placement.SetPlacementPiece(selectPiece);
-
+                            _movementUseCase.Set(selectPiece, boardPiece, placement);
                             break;
                         }
                     }
@@ -102,26 +98,16 @@ namespace ShahBoard.InGame.Presentation.Controller
                     var nextPlacementPiece = nextPlacement.GetPlacementPiece();
                     if (nextPlacementPiece == null)
                     {
-                        // コマの移動
                         _containerUseCase.FindPlacement(selectPiece).SetPlacementPiece(null);
-                        selectPiece.UpdateCurrentPlacement(nextPlacement.GetPosition());
-                        nextPlacement.SetPlacementPiece(selectPiece);
-
+                        _movementUseCase.Set(selectPiece, null, nextPlacement);
                         break;
                     }
 
                     // 相手のコマが配置されている場合
                     if (nextPlacementPiece.playerType == _turnUseCase.GetEnemyPlayer())
                     {
-                        // 相手のコマを削除
-                        nextPlacementPiece.RemoveDeck();
-                        nextPlacementPiece.gameObject.SetActive(false);
-
-                        // コマの移動
                         _containerUseCase.FindPlacement(selectPiece).SetPlacementPiece(null);
-                        selectPiece.UpdateCurrentPlacement(nextPlacement.GetPosition());
-                        nextPlacement.SetPlacementPiece(selectPiece);
-
+                        _movementUseCase.Set(selectPiece, nextPlacementPiece, nextPlacement);
                         break;
                     }
                     else
@@ -135,7 +121,7 @@ namespace ShahBoard.InGame.Presentation.Controller
 
             _containerUseCase.UpdateAllPlacementType(PlacementType.Invalid);
 
-            return GameState.Move;
+            return GameState.Battle;
         }
     }
 }
