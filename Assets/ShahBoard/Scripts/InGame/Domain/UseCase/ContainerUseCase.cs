@@ -85,6 +85,24 @@ namespace ShahBoard.InGame.Domain.UseCase
             }
         }
 
+        public void RemoveAllInDeck(PlayerType playerType)
+        {
+            // コマを初期位置に
+            foreach (var piece in _pieceContainer.GetPlayerPiece(playerType))
+            {
+                if (piece.IsInDeck() && piece.pieceType != PieceType.Emperor)
+                {
+                    piece.SetInitPosition();
+                }
+            }
+
+            // マスに配置されているコマ情報の初期化
+            foreach (var placement in _placementContainer.GetEditPlacement(playerType))
+            {
+                placement.SetPlacementPiece(null);
+            }
+        }
+        
         public bool IsNonePiece(PlayerType playerType)
         {
             var pieces = _pieceContainer.GetPlayerPiece(playerType).FindAll(x => x.IsInDeck());

@@ -39,19 +39,11 @@ namespace ShahBoard.InGame.Presentation.Controller
                 .AddTo(_editView);
 
             _editView.OnEditReset()
-                .Subscribe(x =>
-                {
-                    // 
-                    UnityEngine.Debug.Log($"[LOG] push reset: {x}");
-                })
+                .Subscribe(x => _containerUseCase.RemoveAllInDeck(x))
                 .AddTo(_editView);
 
             _editView.OnEditComplete()
-                .Subscribe(x =>
-                {
-                    UnityEngine.Debug.Log($"[LOG] push complete: {x}");
-                    _statusUseCase.SetEditComplete(x);
-                })
+                .Subscribe(x => _statusUseCase.SetEditComplete(x))
                 .AddTo(_editView);
         }
 
