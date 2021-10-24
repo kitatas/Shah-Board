@@ -10,6 +10,7 @@ namespace ShahBoard.InGame.Domain.UseCase
         void UpdateAllPlacementType(PlacementType placementType);
         void UpdatePlayerPiecePlacement(PlayerType playerType, PlacementType placementType);
         void SetUpMoveRangePlacement(PlayerType playerType, Vector3[] positionList);
+        void SetAllInDeckAuto(PlayerType playerType);
         void RemoveAllInDeck(PlayerType playerType);
     }
 }

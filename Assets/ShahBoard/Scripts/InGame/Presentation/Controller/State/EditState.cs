@@ -31,11 +31,7 @@ namespace ShahBoard.InGame.Presentation.Controller
             _editView.Init();
 
             _editView.OnEditAuto()
-                .Subscribe(x =>
-                {
-                    // 
-                    UnityEngine.Debug.Log($"[LOG] push auto: {x}");
-                })
+                .Subscribe(x => _containerUseCase.SetAllInDeckAuto(x))
                 .AddTo(_editView);
 
             _editView.OnEditReset()

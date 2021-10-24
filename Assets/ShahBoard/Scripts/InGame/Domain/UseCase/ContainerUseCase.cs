@@ -85,6 +85,23 @@ namespace ShahBoard.InGame.Domain.UseCase
             }
         }
 
+        public void SetAllInDeckAuto(PlayerType playerType)
+        {
+            RemoveAllInDeck(playerType);
+
+            var outDeckPieces = _pieceContainer.GetPlayerPiece(playerType)
+                .Where(x => x.IsInDeck() == false)
+                .ToList();
+
+            foreach (var placement in _placementContainer.GetEditPlacement(playerType))
+            {
+                var piece = outDeckPieces[Random.Range(0, outDeckPieces.Count)];
+                piece.UpdateCurrentPlacement(placement.GetPosition());
+                placement.SetPlacementPiece(piece);
+                outDeckPieces.Remove(piece);
+            }
+        }
+
         public void RemoveAllInDeck(PlayerType playerType)
         {
             // コマを初期位置に
