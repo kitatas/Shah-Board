@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using ShahBoard.InGame.Domain.UseCase;
@@ -18,8 +19,8 @@ namespace ShahBoard.InGame.Presentation.Controller
             InputUseCase inputUseCase, PlayerStatusUseCase statusUseCase, EditView editView)
         {
             _containerUseCase = containerUseCase;
-            _inputUseCase = inputUseCase;
             _editUseCase = editUseCase;
+            _inputUseCase = inputUseCase;
             _statusUseCase = statusUseCase;
             _editView = editView;
         }
@@ -28,14 +29,34 @@ namespace ShahBoard.InGame.Presentation.Controller
 
         public override async UniTask InitAsync(CancellationToken token)
         {
+            var playerTypes = new List<PlayerType>
+            {
+                PlayerType.Master,
+                PlayerType.Client,
+            };
+            foreach (var playerType in playerTypes)
+            {
+                _editUseCase.GetEditDeckPieceCount(playerType)
+                    .Subscribe(x => _editView.SetEditCompleteButton(playerType, x > DeckConfig.INIT_PIECE_COUNT))
+                    .AddTo(_editView);
+            }
+
             _editView.Init();
 
             _editView.OnEditAuto()
-                .Subscribe(x => _containerUseCase.SetAllInDeckAuto(x))
+                .Subscribe(x =>
+                {
+                    _editUseCase.SetEditDeckCount(x, DeckConfig.MAX_PIECE_COUNT);
+                    _containerUseCase.SetAllInDeckAuto(x);
+                })
                 .AddTo(_editView);
 
             _editView.OnEditReset()
-                .Subscribe(x => _containerUseCase.RemoveAllInDeck(x))
+                .Subscribe(x =>
+                {
+                    _editUseCase.SetEditDeckCount(x, DeckConfig.INIT_PIECE_COUNT);
+                    _containerUseCase.RemoveAllInDeck(x);
+                })
                 .AddTo(_editView);
 
             _editView.OnEditComplete()
@@ -111,6 +132,10 @@ namespace ShahBoard.InGame.Presentation.Controller
                             if (piece != null)
                             {
                                 piece.SetInitPosition();
+                            }
+                            else
+                            {
+                                _editUseCase.IncreaseEditDeckCount(storePiece.playerType);
                             }
                         }
 

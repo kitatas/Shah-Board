@@ -1,4 +1,5 @@
 using ShahBoard.InGame.Presentation.View;
+using UniRx;
 using UnityEngine;
 
 namespace ShahBoard.InGame.Domain.UseCase
@@ -6,11 +7,16 @@ namespace ShahBoard.InGame.Domain.UseCase
     public sealed class EditUseCase
     {
         private readonly Camera _camera;
-        private const float EDIT_HEIGHT = 5.0f;
+        private readonly ReactiveProperty<int>[] _editDeckPieceCount;
 
         public EditUseCase(Camera camera)
         {
             _camera = camera;
+            _editDeckPieceCount = new[]
+            {
+                new ReactiveProperty<int>(DeckConfig.INIT_PIECE_COUNT),
+                new ReactiveProperty<int>(DeckConfig.INIT_PIECE_COUNT),
+            };
         }
 
         /// <summary>
@@ -36,7 +42,7 @@ namespace ShahBoard.InGame.Domain.UseCase
         public Vector3 GetEditPosition(Vector3 touchPosition)
         {
             var position = _camera.ScreenToWorldPoint(touchPosition);
-            position.y = EDIT_HEIGHT;
+            position.y = PieceConfig.EDIT_HEIGHT;
             return position;
         }
 
@@ -49,7 +55,7 @@ namespace ShahBoard.InGame.Domain.UseCase
         public BoardPlacementView GetValidPlacement(PieceView view, Vector3 tapPosition)
         {
             var position = _camera.ScreenToWorldPoint(tapPosition);
-            position.y = EDIT_HEIGHT;
+            position.y = PieceConfig.EDIT_HEIGHT;
             var ray = new Ray(position, -view.transform.up);
             if (Physics.Raycast(ray, out var hit))
             {
@@ -72,7 +78,7 @@ namespace ShahBoard.InGame.Domain.UseCase
         public PieceView GetPlacementPiece(PieceView view, Vector3 tapPosition)
         {
             var position = _camera.ScreenToWorldPoint(tapPosition);
-            position.y = EDIT_HEIGHT;
+            position.y = PieceConfig.EDIT_HEIGHT;
             var ray = new Ray(position, -view.transform.up);
             if (Physics.Raycast(ray, out var hit))
             {
@@ -84,6 +90,21 @@ namespace ShahBoard.InGame.Domain.UseCase
             }
 
             return null;
+        }
+
+        public IReadOnlyReactiveProperty<int> GetEditDeckPieceCount(PlayerType playerType)
+        {
+            return _editDeckPieceCount[(int)playerType - 1];
+        }
+
+        public void SetEditDeckCount(PlayerType playerType, int value)
+        {
+            _editDeckPieceCount[(int)playerType - 1].Value = value;
+        }
+
+        public void IncreaseEditDeckCount(PlayerType playerType)
+        {
+            SetEditDeckCount(playerType, _editDeckPieceCount[(int)playerType - 1].Value + 1);
         }
     }
 }

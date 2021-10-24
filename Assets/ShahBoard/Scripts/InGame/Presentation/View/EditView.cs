@@ -10,7 +10,7 @@ namespace ShahBoard.InGame.Presentation.View
     {
         [SerializeField] private RectTransform buttonContainerMaster = default;
         [SerializeField] private RectTransform buttonContainerClient = default;
-        
+
         [SerializeField] private Button editAutoMaster = default;
         [SerializeField] private Button editAutoClient = default;
         [SerializeField] private Button editResetMaster = default;
@@ -28,7 +28,7 @@ namespace ShahBoard.InGame.Presentation.View
         public IObservable<PlayerType> OnEditComplete() => _editComplete;
 
         public const float HIDE_HEIGHT = 80.0f;
-        
+
         public void Init()
         {
             editAutoMaster
@@ -70,6 +70,23 @@ namespace ShahBoard.InGame.Presentation.View
                     _editComplete.OnNext(PlayerType.Client);
                 })
                 .AddTo(this);
+        }
+
+        public void SetEditCompleteButton(PlayerType playerType, bool value)
+        {
+            switch (playerType)
+            {
+                case PlayerType.Master:
+                    editResetMaster.interactable = value;
+                    editCompleteMaster.interactable = value;
+                    break;
+                case PlayerType.Client:
+                    editResetClient.interactable = value;
+                    editCompleteClient.interactable = value;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(playerType), playerType, null);
+            }
         }
     }
 }
