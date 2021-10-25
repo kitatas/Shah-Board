@@ -50,7 +50,7 @@ namespace ShahBoard.InGame.Presentation.Controller
                 {
                     // 自分の駒のあるマスの色を更新
                     _containerUseCase.UpdateAllPlacementType(PlacementType.Invalid);
-                    _containerUseCase.UpdatePlayerPiecePlacement(currentTurn, PlacementType.Input);
+                    _containerUseCase.UpdatePlayerPiecePlacement(currentTurn, PlacementType.Select);
 
                     await UniTask.WaitUntil(() => _inputUseCase.isTap, cancellationToken: token);
                     selectPiece = _selectUseCase.GetPlayerPiece(_inputUseCase.tapPosition, currentTurn);
@@ -64,6 +64,7 @@ namespace ShahBoard.InGame.Presentation.Controller
                 _containerUseCase.UpdateAllPlacementType(PlacementType.Invalid);
                 var moveRange = _pieceDataUseCase.GetMoveRangeList(selectPiece);
                 _containerUseCase.SetUpMoveRangePlacement(currentTurn, moveRange);
+                _containerUseCase.FindPlacement(selectPiece).UpdatePlacementType(PlacementType.Select);
 
                 await UniTask.WaitUntil(() => _inputUseCase.isTap, cancellationToken: token);
 

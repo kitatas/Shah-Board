@@ -30,7 +30,7 @@ namespace ShahBoard.InGame.Presentation.View
                         case PlacementType.Invalid:
                             meshRenderer.material.color = Color.white;
                             break;
-                        case PlacementType.Input:
+                        case PlacementType.Select:
                             meshRenderer.material.color = Color.yellow;
                             break;
                         default:

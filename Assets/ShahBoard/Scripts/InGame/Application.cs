@@ -61,7 +61,7 @@ namespace ShahBoard.InGame
         None,
         Valid,
         Invalid,
-        Input,
+        Select,
     }
 
     public enum PieceType
