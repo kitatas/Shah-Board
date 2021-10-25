@@ -13,10 +13,11 @@ namespace ShahBoard.InGame.Presentation.Controller
         private readonly PieceDataUseCase _pieceDataUseCase;
         private readonly SelectUseCase _selectUseCase;
         private readonly TurnUseCase _turnUseCase;
+        private readonly TurnView _turnView;
 
         public SelectState(IBoardPlacementContainerUseCase containerUseCase, InputUseCase inputUseCase,
             MovementUseCase movementUseCase, PieceDataUseCase pieceDataUseCase, SelectUseCase selectUseCase,
-            TurnUseCase turnUseCase)
+            TurnUseCase turnUseCase, TurnView turnView)
         {
             _containerUseCase = containerUseCase;
             _inputUseCase = inputUseCase;
@@ -24,22 +25,22 @@ namespace ShahBoard.InGame.Presentation.Controller
             _pieceDataUseCase = pieceDataUseCase;
             _selectUseCase = selectUseCase;
             _turnUseCase = turnUseCase;
+            _turnView = turnView;
         }
 
         public override GameState state => GameState.Select;
 
         public override async UniTask InitAsync(CancellationToken token)
         {
-
+            _turnView.Init();
         }
 
         public override async UniTask<GameState> TickAsync(CancellationToken token)
         {
+            // ターン表示
             _turnUseCase.SetNextTurn();
-            // TODO: ターン表示待ち
-
             var currentTurn = _turnUseCase.GetCurrentTurn();
-            UnityEngine.Debug.Log($"[LOG] current turn: {currentTurn}");
+            await _turnView.ShowAsync(currentTurn, token);
 
             PieceView selectPiece = null;
             while (true)
