@@ -12,8 +12,10 @@ namespace ShahBoard.InGame.Data.DataStore
 
         [SerializeField]
         [Header(nameof(moveRange))]
+#if UNITY_EDITOR
         [TableMatrix(SquareCells = true, HideColumnIndices = true, HideRowIndices = true,
             DrawElementMethod = nameof(DrawPlacement))]
+#endif
         private bool[,] moveRange = new bool[5, 5];
 
         public PieceType type => pieceType;
