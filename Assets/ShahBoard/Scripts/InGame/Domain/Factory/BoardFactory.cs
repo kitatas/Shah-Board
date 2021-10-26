@@ -17,8 +17,8 @@ namespace ShahBoard.InGame.Domain.Factory
 
         public void GeneratePlacementObject(BoardPlacementView placementView, Vector3 generatePosition, PlayerType type, PieceView pieceView = null)
         {
-            var placementObject = Object.Instantiate(placementView);
-            placementObject.Init(_board, generatePosition, pieceView);
+            var placementObject = Object.Instantiate(placementView, _board);
+            placementObject.Init(generatePosition, pieceView);
             _placementContainer.Add(placementObject, type);
         }
     }

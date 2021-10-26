@@ -10,9 +10,8 @@ namespace ShahBoard.InGame.Presentation.View
         private ReactiveProperty<PlacementType> _placementType;
         [SerializeField] private PieceView _placementPiece;
 
-        public void Init(Transform parent, Vector3 position, PieceView pieceView)
+        public void Init(Vector3 position, PieceView pieceView)
         {
-            transform.parent = parent;
             transform.position = position;
 
             _placementPiece = pieceView;
