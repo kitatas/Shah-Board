@@ -8,6 +8,8 @@ namespace ShahBoard.InGame.Presentation.View
 {
     public sealed class EditView : MonoBehaviour
     {
+        [SerializeField] private Transform mainCamera = default;
+
         [SerializeField] private RectTransform buttonContainerMaster = default;
         [SerializeField] private RectTransform buttonContainerClient = default;
 
@@ -28,6 +30,7 @@ namespace ShahBoard.InGame.Presentation.View
         public IObservable<PlayerType> OnEditComplete() => _editComplete;
 
         public const float HIDE_HEIGHT = 80.0f;
+        public const float EDIT_HEIGHT = 4.5f;
 
         public void Init()
         {
@@ -57,6 +60,7 @@ namespace ShahBoard.InGame.Presentation.View
                 {
                     buttonContainerMaster
                         .DOAnchorPosY(-HIDE_HEIGHT, UiConfig.TWEEN_TIME);
+                    TweenEditCameraPosition(PlayerType.Client);
                     _editComplete.OnNext(PlayerType.Master);
                 })
                 .AddTo(this);
@@ -67,9 +71,12 @@ namespace ShahBoard.InGame.Presentation.View
                 {
                     buttonContainerClient
                         .DOAnchorPosY(HIDE_HEIGHT, UiConfig.TWEEN_TIME);
+                    TweenEditCameraPosition(PlayerType.None);
                     _editComplete.OnNext(PlayerType.Client);
                 })
                 .AddTo(this);
+
+            TweenEditCameraPosition(PlayerType.Master);
         }
 
         public void SetEditCompleteButton(PlayerType playerType, bool value)
@@ -83,6 +90,27 @@ namespace ShahBoard.InGame.Presentation.View
                 case PlayerType.Client:
                     editResetClient.interactable = value;
                     editCompleteClient.interactable = value;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(playerType), playerType, null);
+            }
+        }
+
+        private void TweenEditCameraPosition(PlayerType playerType)
+        {
+            switch (playerType)
+            {
+                case PlayerType.None:
+                    mainCamera
+                        .DOLocalMoveZ(0.0f, UiConfig.TWEEN_TIME);
+                    break;
+                case PlayerType.Master:
+                    mainCamera
+                        .DOLocalMoveZ(-EDIT_HEIGHT, 0.0f);
+                    break;
+                case PlayerType.Client:
+                    mainCamera
+                        .DOLocalMoveZ(EDIT_HEIGHT, UiConfig.TWEEN_TIME);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(playerType), playerType, null);
