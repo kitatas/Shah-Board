@@ -24,7 +24,9 @@ namespace ShahBoard.InGame
         [SerializeField] private EditView editView = default;
         [SerializeField] private MaskView maskView = default;
         [SerializeField] private MatchingStateView matchingStateView = default;
+        [SerializeField] private NextButtonView nextButtonView = default;
         [SerializeField] private TurnView turnView = default;
+        [SerializeField] private WinnerView winnerView = default;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -83,7 +85,9 @@ namespace ShahBoard.InGame
             builder.RegisterInstance<EditView>(editView);
             builder.RegisterInstance<MaskView>(maskView);
             builder.RegisterInstance<MatchingStateView>(matchingStateView);
+            builder.RegisterInstance<NextButtonView>(nextButtonView);
             builder.RegisterInstance<TurnView>(turnView);
+            builder.RegisterInstance<WinnerView>(winnerView);
 
             // Other
             builder.RegisterInstance<Camera>(mainCamera);
