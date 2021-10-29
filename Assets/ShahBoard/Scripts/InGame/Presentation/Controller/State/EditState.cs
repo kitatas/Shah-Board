@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -66,6 +67,8 @@ namespace ShahBoard.InGame.Presentation.Controller
 
         public override async UniTask<GameState> TickAsync(CancellationToken token)
         {
+            _editView.TweenEditCameraPosition(PlayerType.Master);
+
             while (_statusUseCase.IsEditing())
             {
                 // 入力待ち
@@ -160,6 +163,9 @@ namespace ShahBoard.InGame.Presentation.Controller
                     _containerUseCase.UpdateEditPlacement(storePiece.playerType, PlacementType.Invalid);
                 }
             }
+
+            // EditViewのフェードアウト待ち
+            await UniTask.Delay(TimeSpan.FromSeconds(UiConfig.TWEEN_TIME), cancellationToken: token);
 
             return GameState.Select;
         }

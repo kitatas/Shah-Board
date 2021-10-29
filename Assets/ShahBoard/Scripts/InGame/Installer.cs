@@ -22,6 +22,7 @@ namespace ShahBoard.InGame
         [SerializeField] private PieceTable pieceTable = default;
 
         [SerializeField] private EditView editView = default;
+        [SerializeField] private MaskView maskView = default;
         [SerializeField] private MatchingStateView matchingStateView = default;
         [SerializeField] private TurnView turnView = default;
 
@@ -80,6 +81,7 @@ namespace ShahBoard.InGame
 
             // View
             builder.RegisterInstance<EditView>(editView);
+            builder.RegisterInstance<MaskView>(maskView);
             builder.RegisterInstance<MatchingStateView>(matchingStateView);
             builder.RegisterInstance<TurnView>(turnView);
 

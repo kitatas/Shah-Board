@@ -9,6 +9,7 @@ namespace ShahBoard.InGame.Presentation.View
     public sealed class EditView : MonoBehaviour
     {
         [SerializeField] private Transform mainCamera = default;
+        [SerializeField] private MaskView maskView = default;
 
         [SerializeField] private RectTransform buttonContainerMaster = default;
         [SerializeField] private RectTransform buttonContainerClient = default;
@@ -30,7 +31,7 @@ namespace ShahBoard.InGame.Presentation.View
         public IObservable<PlayerType> OnEditComplete() => _editComplete;
 
         public const float HIDE_HEIGHT = 80.0f;
-        public const float EDIT_HEIGHT = 4.5f;
+        public const float EDIT_HEIGHT = 3.0f;
 
         public void Init()
         {
@@ -76,7 +77,7 @@ namespace ShahBoard.InGame.Presentation.View
                 })
                 .AddTo(this);
 
-            TweenEditCameraPosition(PlayerType.Master);
+            maskView.HideAll(0.0f);
         }
 
         public void SetEditCompleteButton(PlayerType playerType, bool value)
@@ -96,21 +97,27 @@ namespace ShahBoard.InGame.Presentation.View
             }
         }
 
-        private void TweenEditCameraPosition(PlayerType playerType)
+        public void TweenEditCameraPosition(PlayerType playerType)
         {
             switch (playerType)
             {
                 case PlayerType.None:
                     mainCamera
-                        .DOLocalMoveZ(0.0f, UiConfig.TWEEN_TIME);
+                        .DOLocalMoveZ(0.0f, UiConfig.TWEEN_TIME)
+                        .SetEase(Ease.Linear);
+                    maskView.ShowCenter(UiConfig.TWEEN_TIME);
                     break;
                 case PlayerType.Master:
                     mainCamera
-                        .DOLocalMoveZ(-EDIT_HEIGHT, 0.0f);
+                        .DOLocalMoveZ(-EDIT_HEIGHT, 0.0f)
+                        .SetEase(Ease.Linear);
+                    maskView.ShowMasterArea(UiConfig.TWEEN_TIME);
                     break;
                 case PlayerType.Client:
                     mainCamera
-                        .DOLocalMoveZ(EDIT_HEIGHT, UiConfig.TWEEN_TIME);
+                        .DOLocalMoveZ(EDIT_HEIGHT, UiConfig.TWEEN_TIME)
+                        .SetEase(Ease.Linear);
+                    maskView.ShowClientArea(UiConfig.TWEEN_TIME);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(playerType), playerType, null);
