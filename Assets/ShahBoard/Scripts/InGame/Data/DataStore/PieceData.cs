@@ -8,15 +8,38 @@ namespace ShahBoard.InGame.Data.DataStore
     [CreateAssetMenu(fileName = nameof(PieceData), menuName = "InGameTable/" + nameof(PieceData), order = 0)]
     public sealed class PieceData : SerializedScriptableObject
     {
+#if UNITY_EDITOR
+        private const int MARGIN = 5;
+        private const int PREVIEW_SIZE = 150;
+
+        [TitleGroup("Piece Type")]
+        [HorizontalGroup("Piece Type/Piece", PREVIEW_SIZE, MARGIN, MARGIN)]
+        [HideLabel]
+        [PreviewField(PREVIEW_SIZE, ObjectFieldAlignment.Left)]
+#endif
+        [SerializeField] private Sprite pieceIcon = default;
+
+#if UNITY_EDITOR
+        [HorizontalGroup("Piece Type/Piece", PREVIEW_SIZE, MARGIN, MARGIN)]
+        [HideLabel]
+#endif
         [SerializeField] private PieceType pieceType = default;
 
-        [SerializeField]
-        [Header(nameof(moveRange))]
 #if UNITY_EDITOR
-        [TableMatrix(SquareCells = true, HideColumnIndices = true, HideRowIndices = true,
-            DrawElementMethod = nameof(DrawPlacement))]
+        [TitleGroup("Move Range")]
+        [HorizontalGroup("Move Range/Range", PREVIEW_SIZE, MARGIN, MARGIN)]
+        [HideLabel]
+        [PreviewField(PREVIEW_SIZE, ObjectFieldAlignment.Left)]
 #endif
-        private bool[,] moveRange = new bool[5, 5];
+        [SerializeField] private Sprite moveRangeSprite = default;
+
+#if UNITY_EDITOR
+        [HorizontalGroup("Move Range/Range", PREVIEW_SIZE, MARGIN, MARGIN)]
+        [TableMatrix(SquareCells = true, HideColumnIndices = true, HideRowIndices = true, DrawElementMethod = nameof(DrawPlacement))]
+#endif
+        [SerializeField] private bool[,] moveRange = new bool[5, 5];
+
+        public Sprite icon => pieceIcon;
 
         public PieceType type => pieceType;
 
