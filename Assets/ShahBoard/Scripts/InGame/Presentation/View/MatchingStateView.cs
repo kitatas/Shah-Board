@@ -6,7 +6,7 @@ namespace ShahBoard.InGame.Presentation.View
 {
     public sealed class MatchingStateView : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI matchingStateText;
+        [SerializeField] private TextMeshProUGUI matchingStateText = default;
 
         public void Show(MatchingState state)
         {

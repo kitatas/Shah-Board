@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using ShahBoard.InGame.Domain.Repository;
 using ShahBoard.InGame.Presentation.View;
@@ -14,11 +15,10 @@ namespace ShahBoard.InGame.Domain.UseCase
             _pieceRepository = pieceRepository;
         }
 
-        public Vector3[] GetMoveRangeList(PieceView pieceView)
+        public IEnumerable<Vector3> GetMoveRangeList(PieceView pieceView)
         {
             return _pieceRepository.FindData(pieceView.pieceType).GetMoveRange()
-                .Select(v => v + pieceView.GetInDeckPosition())
-                .ToArray();
+                .Select(v => v + pieceView.GetInDeckPosition());
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using ShahBoard.InGame.Data.Container;
 using ShahBoard.InGame.Presentation.View;
@@ -61,7 +62,7 @@ namespace ShahBoard.InGame.Domain.UseCase
         /// </summary>
         /// <param name="playerType"></param>
         /// <param name="positionList"></param>
-        public void SetUpMoveRangePlacement(PlayerType playerType, Vector3[] positionList)
+        public void SetUpMoveRangePlacement(PlayerType playerType, IEnumerable<Vector3> positionList)
         {
             foreach (var position in positionList)
             {

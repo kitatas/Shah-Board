@@ -20,7 +20,7 @@ namespace ShahBoard.InGame.Data.DataStore
 
         public PieceType type => pieceType;
 
-        public Vector3[] GetMoveRange()
+        public IEnumerable<Vector3> GetMoveRange()
         {
             var ranges = new List<Vector3>();
             for (int i = 0; i < moveRange.GetLength(0); i++)
@@ -39,7 +39,7 @@ namespace ShahBoard.InGame.Data.DataStore
                 }
             }
 
-            return ranges.ToArray();
+            return ranges;
         }
 
 #if UNITY_EDITOR

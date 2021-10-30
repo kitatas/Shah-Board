@@ -1,8 +1,8 @@
 using System;
 using DG.Tweening;
+using ShahBoard.Common.Presentation.View;
 using UniRx;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ShahBoard.InGame.Presentation.View
 {
@@ -14,12 +14,12 @@ namespace ShahBoard.InGame.Presentation.View
         [SerializeField] private RectTransform buttonContainerMaster = default;
         [SerializeField] private RectTransform buttonContainerClient = default;
 
-        [SerializeField] private Button editAutoMaster = default;
-        [SerializeField] private Button editAutoClient = default;
-        [SerializeField] private Button editResetMaster = default;
-        [SerializeField] private Button editResetClient = default;
-        [SerializeField] private Button editCompleteMaster = default;
-        [SerializeField] private Button editCompleteClient = default;
+        [SerializeField] private BaseButton editAutoMaster = default;
+        [SerializeField] private BaseButton editAutoClient = default;
+        [SerializeField] private BaseButton editResetMaster = default;
+        [SerializeField] private BaseButton editResetClient = default;
+        [SerializeField] private BaseButton editCompleteMaster = default;
+        [SerializeField] private BaseButton editCompleteClient = default;
 
         private readonly Subject<PlayerType> _editAuto = new Subject<PlayerType>();
         public IObservable<PlayerType> OnEditAuto() => _editAuto;
@@ -35,28 +35,23 @@ namespace ShahBoard.InGame.Presentation.View
 
         public void Init()
         {
-            editAutoMaster
-                .OnClickAsObservable()
+            editAutoMaster.OnClick()
                 .Subscribe(_ => _editAuto.OnNext(PlayerType.Master))
                 .AddTo(this);
 
-            editAutoClient
-                .OnClickAsObservable()
+            editAutoClient.OnClick()
                 .Subscribe(_ => _editAuto.OnNext(PlayerType.Client))
                 .AddTo(this);
 
-            editResetMaster
-                .OnClickAsObservable()
+            editResetMaster.OnClick()
                 .Subscribe(_ => _editReset.OnNext(PlayerType.Master))
                 .AddTo(this);
 
-            editResetClient
-                .OnClickAsObservable()
+            editResetClient.OnClick()
                 .Subscribe(_ => _editReset.OnNext(PlayerType.Client))
                 .AddTo(this);
 
-            editCompleteMaster
-                .OnClickAsObservable()
+            editCompleteMaster.OnClick()
                 .Subscribe(_ =>
                 {
                     buttonContainerMaster
@@ -66,8 +61,7 @@ namespace ShahBoard.InGame.Presentation.View
                 })
                 .AddTo(this);
 
-            editCompleteClient
-                .OnClickAsObservable()
+            editCompleteClient.OnClick()
                 .Subscribe(_ =>
                 {
                     buttonContainerClient
@@ -85,12 +79,12 @@ namespace ShahBoard.InGame.Presentation.View
             switch (playerType)
             {
                 case PlayerType.Master:
-                    editResetMaster.interactable = value;
-                    editCompleteMaster.interactable = value;
+                    editResetMaster.SetInteractable(value);
+                    editCompleteMaster.SetInteractable(value);
                     break;
                 case PlayerType.Client:
-                    editResetClient.interactable = value;
-                    editCompleteClient.interactable = value;
+                    editResetClient.SetInteractable(value);
+                    editCompleteClient.SetInteractable(value);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(playerType), playerType, null);
