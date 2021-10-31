@@ -13,17 +13,22 @@ namespace ShahBoard.InGame.Presentation.Controller
         private readonly IBoardPlacementContainerUseCase _containerUseCase;
         private readonly EditUseCase _editUseCase;
         private readonly InputUseCase _inputUseCase;
+        private readonly PieceDataUseCase _dataUseCase;
         private readonly PlayerStatusUseCase _statusUseCase;
         private readonly EditView _editView;
+        private readonly PieceDataView _dataView;
 
         public EditState(IBoardPlacementContainerUseCase containerUseCase, EditUseCase editUseCase,
-            InputUseCase inputUseCase, PlayerStatusUseCase statusUseCase, EditView editView)
+            InputUseCase inputUseCase, PieceDataUseCase dataUseCase, PlayerStatusUseCase statusUseCase,
+            EditView editView, PieceDataView dataView)
         {
             _containerUseCase = containerUseCase;
             _editUseCase = editUseCase;
             _inputUseCase = inputUseCase;
+            _dataUseCase = dataUseCase;
             _statusUseCase = statusUseCase;
             _editView = editView;
+            _dataView = dataView;
         }
 
         public override GameState state => GameState.Edit;
@@ -63,11 +68,14 @@ namespace ShahBoard.InGame.Presentation.Controller
             _editView.OnEditComplete()
                 .Subscribe(x => _statusUseCase.SetEditComplete(x))
                 .AddTo(_editView);
+
+            _dataView.Activate(false);
         }
 
         public override async UniTask<GameState> TickAsync(CancellationToken token)
         {
             _editView.TweenEditCameraPosition(PlayerType.Master);
+            _dataView.Activate(true);
 
             while (_statusUseCase.IsEditing())
             {
@@ -81,6 +89,8 @@ namespace ShahBoard.InGame.Presentation.Controller
                 if (storePiece != null)
                 {
                     _containerUseCase.UpdateEditPlacement(storePiece.playerType, PlacementType.Valid);
+                    var moveRangeSprite = _dataUseCase.GetPieceMoveRangeSprite(storePiece.pieceType);
+                    _dataView.SetData($"{storePiece.pieceType}", moveRangeSprite);
 
                     // 配置結果待ち
                     await UniTask.WaitUntil(() =>
@@ -162,6 +172,8 @@ namespace ShahBoard.InGame.Presentation.Controller
 
                     _containerUseCase.UpdateEditPlacement(storePiece.playerType, PlacementType.Invalid);
                 }
+
+                _dataView.Activate(false);
             }
 
             // EditViewのフェードアウト待ち

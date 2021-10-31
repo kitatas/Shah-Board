@@ -43,6 +43,8 @@ namespace ShahBoard.InGame.Data.DataStore
 
         public PieceType type => pieceType;
 
+        public Sprite sprite => moveRangeSprite;
+
         public IEnumerable<Vector3> GetMoveRange()
         {
             var ranges = new List<Vector3>();

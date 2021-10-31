@@ -25,6 +25,7 @@ namespace ShahBoard.InGame
         [SerializeField] private MaskView maskView = default;
         [SerializeField] private MatchingStateView matchingStateView = default;
         [SerializeField] private NextButtonView nextButtonView = default;
+        [SerializeField] private PieceDataView pieceDataView = default;
         [SerializeField] private TurnView turnView = default;
         [SerializeField] private WinnerView winnerView = default;
 
@@ -86,6 +87,7 @@ namespace ShahBoard.InGame
             builder.RegisterInstance<MaskView>(maskView);
             builder.RegisterInstance<MatchingStateView>(matchingStateView);
             builder.RegisterInstance<NextButtonView>(nextButtonView);
+            builder.RegisterInstance<PieceDataView>(pieceDataView);
             builder.RegisterInstance<TurnView>(turnView);
             builder.RegisterInstance<WinnerView>(winnerView);
 

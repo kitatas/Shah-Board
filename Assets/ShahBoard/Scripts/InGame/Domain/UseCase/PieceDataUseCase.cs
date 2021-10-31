@@ -20,5 +20,10 @@ namespace ShahBoard.InGame.Domain.UseCase
             return _pieceRepository.FindData(pieceView.pieceType).GetMoveRange()
                 .Select(v => v + pieceView.GetInDeckPosition());
         }
+
+        public Sprite GetPieceMoveRangeSprite(PieceType pieceType)
+        {
+            return _pieceRepository.FindData(pieceType).sprite;
+        }
     }
 }
