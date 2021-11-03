@@ -12,5 +12,13 @@ namespace ShahBoard.Common
         Main,
     }
 
+    public enum BgmType
+    {
+    }
+
+    public enum SeType
+    {
+    }
+
     #endregion
 }
