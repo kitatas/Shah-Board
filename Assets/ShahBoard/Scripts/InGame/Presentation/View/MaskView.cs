@@ -8,9 +8,9 @@ namespace ShahBoard.InGame.Presentation.View
         [SerializeField] private RectTransform maskTop = default;
         [SerializeField] private RectTransform maskBottom = default;
 
-        private const float SHOW_HEIGHT = 55.0f;
-        private const float HIDE_HEIGHT = 300.0f;
-        private const float ALL_HIDE_HEIGHT = 355.0f;
+        private const float SHOW_HEIGHT = 30.0f;
+        private const float HIDE_HEIGHT = 202.5f;
+        private const float ALL_HIDE_HEIGHT = 240.0f;
 
         public void HideAll(float tweenTime)
         {
