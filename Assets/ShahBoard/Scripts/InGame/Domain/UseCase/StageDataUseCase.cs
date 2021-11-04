@@ -1,3 +1,4 @@
+using ShahBoard.Common;
 using ShahBoard.InGame.Domain.Factory;
 using ShahBoard.InGame.Domain.Repository;
 using UnityEngine;

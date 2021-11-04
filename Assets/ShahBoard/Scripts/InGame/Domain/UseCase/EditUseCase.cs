@@ -1,3 +1,4 @@
+using ShahBoard.Common;
 using ShahBoard.InGame.Presentation.View;
 using UniRx;
 using UnityEngine;

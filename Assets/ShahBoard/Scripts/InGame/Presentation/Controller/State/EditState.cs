@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using ShahBoard.Common;
+using ShahBoard.Common.Domain.UseCase;
 using ShahBoard.InGame.Domain.UseCase;
 using ShahBoard.InGame.Presentation.View;
 using UniRx;
@@ -15,18 +17,20 @@ namespace ShahBoard.InGame.Presentation.Controller
         private readonly InputUseCase _inputUseCase;
         private readonly PieceDataUseCase _dataUseCase;
         private readonly PlayerStatusUseCase _statusUseCase;
+        private readonly LanguageUseCase _languageUseCase;
         private readonly EditView _editView;
         private readonly PieceDataView _dataView;
 
         public EditState(IBoardPlacementContainerUseCase containerUseCase, EditUseCase editUseCase,
             InputUseCase inputUseCase, PieceDataUseCase dataUseCase, PlayerStatusUseCase statusUseCase,
-            EditView editView, PieceDataView dataView)
+            LanguageUseCase languageUseCase, EditView editView, PieceDataView dataView)
         {
             _containerUseCase = containerUseCase;
             _editUseCase = editUseCase;
             _inputUseCase = inputUseCase;
             _dataUseCase = dataUseCase;
             _statusUseCase = statusUseCase;
+            _languageUseCase = languageUseCase;
             _editView = editView;
             _dataView = dataView;
         }
@@ -89,7 +93,8 @@ namespace ShahBoard.InGame.Presentation.Controller
                 {
                     _containerUseCase.UpdateEditPlacement(storePiece.playerType, PlacementType.Valid);
                     var moveRangeSprite = _dataUseCase.GetPieceMoveRangeSprite(storePiece.pieceType);
-                    _dataView.SetData($"{storePiece.pieceType}", moveRangeSprite);
+                    var pieceName = _languageUseCase.Find(LanguageType.Japanese, storePiece.pieceType).name;
+                    _dataView.SetData(pieceName, moveRangeSprite);
 
                     // 配置結果待ち
                     await UniTask.WaitUntil(() =>

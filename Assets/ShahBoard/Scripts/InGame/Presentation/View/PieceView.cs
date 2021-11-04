@@ -1,3 +1,4 @@
+using ShahBoard.Common;
 using UnityEngine;
 
 namespace ShahBoard.InGame.Presentation.View

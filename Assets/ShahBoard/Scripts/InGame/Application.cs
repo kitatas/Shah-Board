@@ -64,33 +64,6 @@ namespace ShahBoard.InGame
         Select,
     }
 
-    public enum PieceType
-    {
-        None,
-        Emperor,    // 皇帝
-        Fool,       // 愚者
-        Magician,   // 魔術師
-        Priestess,  // 女教皇
-        Empress,    // 女帝
-        Hierophant, // 教皇
-        Lovers,     // 恋人
-        Chariot,    // 戦車
-        Justice,    // 正義
-        Hermit,     // 隠者
-        Wheel,      // 運命の輪
-        Strength,   // 力
-        HangedMan,  // 吊された男
-        Death,      // 死神
-        Temperance, // 節制
-        Devil,      // 悪魔
-        Tower,      // 塔
-        Star,       // 星
-        Moon,       // 月
-        Sun,        // 太陽
-        Judgement,  // 正義
-        World,      // 世界
-    }
-
     public enum PieceStatus
     {
         None,

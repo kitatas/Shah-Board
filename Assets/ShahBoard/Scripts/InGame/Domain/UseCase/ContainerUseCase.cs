@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ShahBoard.Common;
 using ShahBoard.InGame.Data.Container;
 using ShahBoard.InGame.Presentation.View;
 using UnityEngine;
