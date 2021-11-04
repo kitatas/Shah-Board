@@ -69,13 +69,12 @@ namespace ShahBoard.InGame.Presentation.Controller
                 .Subscribe(x => _statusUseCase.SetEditComplete(x))
                 .AddTo(_editView);
 
-            _dataView.Activate(false);
+            _dataView.Init();
         }
 
         public override async UniTask<GameState> TickAsync(CancellationToken token)
         {
             _editView.TweenEditCameraPosition(PlayerType.Master);
-            _dataView.Activate(true);
 
             while (_statusUseCase.IsEditing())
             {
@@ -173,7 +172,7 @@ namespace ShahBoard.InGame.Presentation.Controller
                     _containerUseCase.UpdateEditPlacement(storePiece.playerType, PlacementType.Invalid);
                 }
 
-                _dataView.Activate(false);
+                _dataView.Init();
             }
 
             // EditViewのフェードアウト待ち

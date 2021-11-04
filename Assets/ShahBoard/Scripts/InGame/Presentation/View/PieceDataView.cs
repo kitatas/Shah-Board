@@ -11,6 +11,13 @@ namespace ShahBoard.InGame.Presentation.View
         [SerializeField] private Image pieceMoveRangeMaster = default;
         [SerializeField] private Image pieceMoveRangeClient = default;
 
+        public void Init()
+        {
+            pieceNameMaster.text = $"";
+            pieceNameClient.text = $"";
+            Activate(false);
+        }
+
         public void SetData(string pieceName, Sprite sprite)
         {
             // TODO: 名称変更
@@ -18,12 +25,11 @@ namespace ShahBoard.InGame.Presentation.View
             pieceNameClient.text = $"{pieceName}";
             pieceMoveRangeMaster.sprite = sprite;
             pieceMoveRangeClient.sprite = sprite;
+            Activate(true);
         }
 
-        public void Activate(bool value)
+        private void Activate(bool value)
         {
-            pieceNameMaster.text = $"";
-            pieceNameClient.text = $"";
             pieceMoveRangeMaster.enabled = value;
             pieceMoveRangeClient.enabled = value;
         }
