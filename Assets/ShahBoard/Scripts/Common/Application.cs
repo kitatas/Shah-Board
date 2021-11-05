@@ -18,6 +18,14 @@ namespace ShahBoard.Common
 
     public enum SeType
     {
+        Decision,
+        Cancel,
+    }
+
+    public enum ButtonType
+    {
+        Decision,
+        Cancel,
     }
 
     public enum LanguageType
