@@ -111,4 +111,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  pieceIcon: {fileID: 0}
   pieceType: 10
+  moveRangeSprite: {fileID: -5519977043689896800, guid: 839aa44266c0e400da6a08e16a524f9b, type: 3}
