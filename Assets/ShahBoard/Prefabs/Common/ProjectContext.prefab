@@ -47,3 +47,4 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
+  languageTable: {fileID: 11400000, guid: fbb825919ddcd4dd8b6ee326bedb5a7b, type: 2}

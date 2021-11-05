@@ -50,7 +50,7 @@ namespace ShahBoard.Common
         Star       = 18, // 星
         Moon       = 19, // 月
         Sun        = 20, // 太陽
-        Judgement  = 21, // 正義
+        Judgement  = 21, // 審判
         World      = 22, // 世界
     }
     
