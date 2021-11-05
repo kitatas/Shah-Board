@@ -19,9 +19,11 @@ namespace ShahBoard.Common
 
             // Repository
             builder.Register<LanguageRepository>(Lifetime.Singleton);
+            builder.Register<SaveRepository>(Lifetime.Singleton);
 
             // UseCase
             builder.Register<LanguageUseCase>(Lifetime.Singleton);
+            builder.Register<SaveUseCase>(Lifetime.Singleton).AsImplementedInterfaces();
 
             // Controller
             builder.Register<SceneLoader>(Lifetime.Singleton);
